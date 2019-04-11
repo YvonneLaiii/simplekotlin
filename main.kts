@@ -3,14 +3,80 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
+fun whenFn(word: Any): String {
+  when(word) {
+    "Hello" -> return("world")
+    "Howdy" -> return("Say what?")
+    "Bonjour" -> return ("Say what?")
+    0 -> return("zero")
+    1 -> return("one")
+    5 -> return("low number")
+    9 -> return("low number")
+  }
+  return("I don't understand")
+}
 
 // write an "add" function that takes two Ints, returns an Int, and adds the values
+fun add(x: Int, y: Int): Int {
+  return(x+y)
+}
+
 // write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(x: Int, y: Int): Int {
+  return(x-y)
+}
+
 // write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+fun mathOp(x: Int, y: Int, z: (Int, Int) -> Int): Int {
+  return(z(x, y))
+}
 
 // write a class "Person" with first name, last name and age
+class Person(val firstName: String, val lastName: String, var age: Int) {
+    val debugString: String
+        get() = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+}
 
 // write a class "Money"
+class Money(var amount: Int, var currency: String) {
+  fun convert(result: String): Money {
+    var indicator = 1.0
+    when (this.currency) {
+      "USD" -> when (result) {
+        "USD" -> indicator = 1.0
+        "GBP" -> indicator = 0.5
+        "EUR" -> indicator = 1.5
+        "CAN" -> indicator = 1.25
+      }
+      "GBP" -> when (result) {
+        "USD" -> indicator = 2.0
+        "GBP" -> indicator = 1.0
+        "EUR" -> indicator = 3.0
+        "CAN" -> indicator = 2.5
+      }
+      "EUR" -> when (result) {
+        "EUR" -> indicator = 1.0
+        "USD" -> indicator = 0.666
+        "GBP" -> indicator = 0.333
+        "CAN" -> indicator = 0.8333
+      }
+      "CAN" -> when (result) {
+        "USD" -> indicator = 0.8
+        "GBP" -> indicator = 0.4
+        "EUR" -> indicator = 1.2
+        "CAN" -> indicator = 1.0
+      }
+    }
+    var temp = this.amount * indicator
+    return Money(temp.toInt(), result)
+  }
+  operator fun plus(other: Money) :Money {
+    var temp = other.convert(this.currency)
+    return(Money(temp.amount+this.amount, this.currency))
+  }
+}
+
+
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
