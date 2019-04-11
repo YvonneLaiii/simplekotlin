@@ -6,12 +6,11 @@ println("UW Homework: Simple Kotlin")
 fun whenFn(word: Any): String {
   when(word) {
     "Hello" -> return("world")
-    "Howdy" -> return("Say what?")
-    "Bonjour" -> return ("Say what?")
     0 -> return("zero")
     1 -> return("one")
-    5 -> return("low number")
-    9 -> return("low number")
+    in 2..10 -> return("low number")
+    is Int -> return("a number")
+    is String -> return("Say what?")
   }
   return("I don't understand")
 }
@@ -32,13 +31,27 @@ fun mathOp(x: Int, y: Int, z: (Int, Int) -> Int): Int {
 }
 
 // write a class "Person" with first name, last name and age
-class Person(val firstName: String, val lastName: String, var age: Int) {
-    val debugString: String
-        get() = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
+class Person constructor(val firstName: String, val lastName: String, var age: Int) {
+  override fun hashCode(): Int {
+    return(firstName.hashCode() * lastName.hashCode() + age)
+  }
+  fun equals(x: Person): Boolean {
+    return(this.hashCode() == x.hashCode())
+  }
+  val debugString: String
+    get() = "[Person firstName:${firstName} lastName:${lastName} age:${age}]"
 }
 
 // write a class "Money"
 class Money(var amount: Int, var currency: String) {
+  init {
+    if (amount < 0) {
+      throw Exception("Error: Amount cannot be less than 0")
+    }
+    if (currency != "USD" && currency != "EUR" && currency != "CAN" && currency != "GBP") {
+      throw Exception("Error: Currency type")
+    }
+  }
   fun convert(result: String): Money {
     var indicator = 1.0
     when (this.currency) {
@@ -70,13 +83,11 @@ class Money(var amount: Int, var currency: String) {
     var temp = this.amount * indicator
     return Money(temp.toInt(), result)
   }
-  operator fun plus(other: Money) :Money {
-    var temp = other.convert(this.currency)
+  operator fun plus(x: Money) :Money {
+    var temp = x.convert(this.currency)
     return(Money(temp.amount+this.amount, this.currency))
   }
 }
-
-
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
